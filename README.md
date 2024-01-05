@@ -67,8 +67,8 @@ data
 On Linux, you can do this with:
 
 ```
-mkdir -p data/TinyLlama-1.1B-Chat-v1.0
-mkdir -p data/TinyLlama-1.1B-Chat-v1.0-GGUF
+mkdir -p 'data/TinyLlama-1.1B-Chat-v1.0'
+mkdir -p 'data/TinyLlama-1.1B-Chat-v1.0-GGUF'
 wget 'https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf?download=true' -O 'data/TinyLlama-1.1B-Chat-v1.0-GGUF/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf'
 wget 'https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q8_0.gguf?download=true' -O 'data/TinyLlama-1.1B-Chat-v1.0-GGUF/tinyllama-1.1b-chat-v1.0.Q8_0.gguf'
 wget 'https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0/resolve/main/model.safetensors?download=true' -O 'data/TinyLlama-1.1B-Chat-v1.0/model.safetensors'
