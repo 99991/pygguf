@@ -97,6 +97,10 @@ def load_gguf(f):
     return info, tensorinfo
 
 def dequantize_q4_k(data):
+    # C implementation
+    # https://github.com/ggerganov/ggml/blob/fca1caafea7de9fbd7efc733b9818f9cf2da3050/src/ggml-quants.c#L1929
+    # C struct definition
+    # https://github.com/ggerganov/ggml/blob/fca1caafea7de9fbd7efc733b9818f9cf2da3050/src/ggml-quants.h#L116
     num_blocks = len(data) // Q4_K_BLOCK_SIZE
 
     data_f16 = np.frombuffer(data, dtype=np.float16).reshape(num_blocks, Q4_K_BLOCK_SIZE // 2)
@@ -108,7 +112,7 @@ def dequantize_q4_k(data):
     qs1 = data_u8[:, 4:16].reshape(num_blocks, 12, 1)
     qs2 = data_u8[:, 16:].reshape(num_blocks, 4, 32)
 
-    # Dequantize scales and offsets
+    # Dequantize scales and offsets (6 bits and 4 + 2 bits)
     factors = scale_factors * np.concatenate([qs1[:, 0:4] & 0b111111, (qs1[:, 8:] & 15) | ((qs1[:, 0:4] >> 6) << 4)], axis=1)
     offsets = scale_offsets * np.concatenate([qs1[:, 4:8] & 0b111111, (qs1[:, 8:] >> 4) | ((qs1[:, 4:8] >> 6) << 4)], axis=1)
 
@@ -118,6 +122,10 @@ def dequantize_q4_k(data):
     return factors * qs2 - offsets
 
 def dequantize_q6_k(data):
+    # C implementation
+    # https://github.com/ggerganov/ggml/blob/fca1caafea7de9fbd7efc733b9818f9cf2da3050/src/ggml-quants.c#L2275
+    # C struct definition
+    # https://github.com/ggerganov/ggml/blob/fca1caafea7de9fbd7efc733b9818f9cf2da3050/src/ggml-quants.h#L152
     num_blocks = len(data) // Q6_K_BLOCK_SIZE
 
     data_f16 = np.frombuffer(data, dtype=np.float16).reshape(num_blocks, Q6_K_BLOCK_SIZE // 2)
@@ -161,6 +169,8 @@ def dequantize_q6_k(data):
     ], axis=1)
 
 def dequantize_q8_0(data):
+    # C struct definition
+    # https://github.com/ggerganov/ggml/blob/fca1caafea7de9fbd7efc733b9818f9cf2da3050/src/ggml-quants.h#L43
     num_blocks = len(data) // Q8_0_BLOCK_SIZE
 
     scales = np.frombuffer(data, dtype=np.float16).reshape(num_blocks, 1 + 16)[:, :1].astype(np.float32)
