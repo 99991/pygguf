@@ -4,9 +4,9 @@
 
 #### DISCLAIMER
 
+* ⚠️ This library is not being maintained anymore, since llama.cpp has added support for loading GGUF files from Python. It merely serves historic and educational purposes now. You are probably looking for the [gguf library](https://pypi.org/project/gguf/) instead.
 * This code has only been tested for the TinyLlama model. It might (or might not) work for other models.
 If any issues arise, a probable source might be the weird transposition of the key and query weights.
-* If you want maximum performance, you should probably use a C implementation instead.
 
 # Prerequisites
 
